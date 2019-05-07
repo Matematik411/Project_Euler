@@ -196,11 +196,28 @@ def katera_roka_zmaga(poker1, poker2):
                 return 'SPLIT'
 
 def vsota_stevk(n):
+    '''Vrne vsoto stevk.'''
     vsota = 0
     while n > 0:
         vsota += n % 10
         n //= 10
     return vsota
+
+def delitelji(n):
+    '''Vrne seznam vseh deliteljev n.'''
+    d = []
+    zacetni = n
+    for i in range(2, zacetni // 2 + 1):
+        if n % i == 0:
+            d.append(i)
+    return d + [zacetni]
+
+def tuji_st(a,b):
+    '''Ali ste stevili tuji?'''
+    for d in delitelji(a):
+        if d in delitelji(b):
+            return False
+    return True
 
 def naloga31(vrednost, seznam):
     '''How many different ways can vrednost be made using any number of coins?'''
@@ -562,10 +579,18 @@ def naloga51():
                         if kazalec and je_prastevilo(c):
                             return c
 
-
-
+def naloga56():
+    '''Considering natural numbers of the form, a**b, where a, b < 100, what is the maximum digital sum?'''
+    najvecja_vsota = 0
+    for a in range(1, 101):
+        for b in range(1, 101):
+            potenca = a ** b
+            vsota = vsota_stevk(potenca)
+            najvecja_vsota = max(najvecja_vsota, vsota)
+    return najvecja_vsota
 
 def naloga58():
+    '''If one complete new layer is wrapped around the spiral above, a square spiral with side length 9 will be formed. If this process is continued, what is the side length of the square spiral for which the ratio of primes along both diagonals first falls below 10%?'''
     n = 49
     kotne = 13
     prastevila = 8
@@ -581,33 +606,8 @@ def naloga58():
 
 
 
-def naloga56():
-    '''Considering natural numbers of the form, a**b, where a, b < 100, what is the maximum digital sum?'''
-    najvecja_vsota = 0
-    for a in range(1, 101):
-        for b in range(1, 101):
-            potenca = a ** b
-            vsota = vsota_stevk(potenca)
-            najvecja_vsota = max(najvecja_vsota, vsota)
-    return najvecja_vsota
 
-
-def delitelji(n):
-    d = []
-    zacetni = n
-    for i in range(2, zacetni // 2 + 1):
-        if n % i == 0:
-            d.append(i)
-    return d + [zacetni]
-
-
-def tuji_st(a,b):
-    for d in delitelji(a):
-        if d in delitelji(b):
-            return False
-    return True
-
-
+# TA NE DELA
 def naloga69(m):
     #Yup, no way this is The way...
     resitev = 1
