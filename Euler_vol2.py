@@ -219,6 +219,28 @@ def tuji_st(a,b):
             return False
     return True
 
+def k_kotno(k, n):
+    '''Vrne n-to k-kotno stevilo.'''
+    if k == 3:
+        return n * (n + 1) // 2
+    if k == 4:
+        return n * n
+    if k == 5:
+        return n * (3 * n - 1) // 2
+    if k == 6:
+        return n * (2 * n - 1)
+    if k == 7:
+        return n * (5 * n - 3) // 2
+    if k == 8:
+        return n * (3 * n - 2)
+
+def gcd(m, n):
+    '''Najvecji skupni veckratnik stevil n in m.'''
+    if n == 0:
+        return m
+    else:
+        return gcd(n, m % n)
+
 def naloga31(vrednost, seznam):
     '''How many different ways can vrednost be made using any number of coins?'''
     if seznam == []:
@@ -226,12 +248,12 @@ def naloga31(vrednost, seznam):
     vrednost -= seznam[0]
     if vrednost == 0:
         vrednost += seznam[0]
-        return 1 + koliko(vrednost, seznam[1:])
+        return 1 + naloga31(vrednost, seznam[1:])
     elif vrednost < 0:
         vrednost += seznam[0]
-        return koliko(vrednost, seznam[1:])
+        return naloga31(vrednost, seznam[1:])
     elif vrednost > 0:
-        return koliko(vrednost, seznam) + koliko(vrednost + seznam[0], seznam[1:])
+        return naloga31(vrednost, seznam) + naloga31(vrednost + seznam[0], seznam[1:])
 
 def naloga32():
     '''Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.'''
@@ -623,20 +645,7 @@ def naloga69(m):
     return vrednost
         
 
-def k_kotno(k, n):
-    '''Vrne n-to k-kotno stevilo.'''
-    if k == 3:
-        return n * (n + 1) // 2
-    if k == 4:
-        return n * n
-    if k == 5:
-        return n * (3 * n - 1) // 2
-    if k == 6:
-        return n * (2 * n - 1)
-    if k == 7:
-        return n * (5 * n - 3) // 2
-    if k == 8:
-        return n * (3 * n - 2)
+
 
 def naloga61():
     '''Find the sum of the only ordered set of six cyclic 4-digit numbers for which each polygonal type: triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different number in the set.'''
@@ -678,3 +687,93 @@ def naloga61():
                             
             if len(zeljena) == 6 and (zeljena[5] % 100) == (zeljena[0] // 100):
                 return sum(zeljena)
+
+def naloga57(n):
+    '''In the first n expansions (of sqrt(2)), how many fractions contain a numerator with more digits than denominator?'''
+    resitev = 0
+    st, im = (3,2)
+    for _ in range(n - 1):
+        st, im = 2 * im + st, st + im
+        if len(str(st)) > len(str(im)):
+            resitev += 1
+    return resitev
+
+
+def naloga67():
+    '''Find the maximum total from top to bottom in triangle.txt, a 15K text file containing a triangle with one-hundred rows.'''
+    resitve= {}
+    trikotnik = []
+    with open('p067_triangle.txt', 'r') as dat:
+        for line in dat.readlines():
+            line = [int(a) for a in line.split()]
+            trikotnik.append(line)
+        
+    def trikotna_vsota(n, i):
+        if n == 99:
+            resitve[(n, i)] = trikotnik[n][i]
+        elif (n, i) not in resitve:
+            resitve[(n,i)] = max(trikotna_vsota(n + 1, i), trikotna_vsota(n + 1, i +1)) + trikotnik[n][i]
+        return resitve[(n,i)]
+    return trikotna_vsota(0, 0)
+
+
+
+def naloga77(n):
+    '''What is the first value which can be written as the sum of primes in over n different ways?'''
+    seznam_prastevil = [2]
+    k = 3
+    i = 5
+    while True:
+        i += 1
+        while seznam_prastevil[-1] < i:
+            kazalec = True
+            for a in seznam_prastevil:
+                if k % a == 0:
+                    kazalec = False
+                    break
+            if kazalec:
+                seznam_prastevil.append(k)
+            k += 1
+        #naloga31(n, seznam) vrne stevilo moznih zapisov stevila n z vrednostmi iz seznama
+        if naloga31(i, seznam_prastevil) > n:
+            return(i)
+
+            
+def naloga71(n):
+    '''By listing the set of reduced proper fractions for d ≤ n in ascending order of size, find the numerator of the fraction immediately to the left of 3/7.'''
+    ulomki = []
+    for im in range(2, n + 1):
+        for st in range(int(im * 3/7),int(im * 3/7) + 1):
+            if gcd(st, im) == 1:
+                ulomki.append([st / im, (st, im)])
+    ulomki.sort()
+    polozaj = ulomki.index([3/7, (3,7)])
+    return ulomki[polozaj - 1][1][0]
+
+
+#Ta ne dela!
+def naloga72(n):
+    '''How many elements would be contained in the set of reduced proper fractions for d ≤ 1,000,000?'''
+    ulomki = 0
+    for im in range(2, n + 1):
+        for st in range(1, im):
+            if gcd(st, im) == 1:
+                ulomki += 1
+    return ulomki
+
+def naloga73(n):
+    '''How many fractions lie between 1/3 and 1/2 in the sorted set of reduced proper fractions for d ≤ n?'''
+    ulomki = []
+    for im in range(2, n + 1):
+        for st in range(int(im * 1/3),int(im * 1/2) + 1):
+            if gcd(st, im) == 1:
+                ulomki.append([st / im, (st, im)])
+    ulomki.sort()
+    polozaj1 = ulomki.index([1/2, (1,2)])
+    polozaj2 = ulomki.index([1/3, (1,3)])
+
+    return polozaj1 - polozaj2 - 1
+
+
+
+
