@@ -623,3 +623,63 @@ def naloga69(m):
     return vrednost
         
 
+def k_kotno(k, n):
+    '''Vrne n-to k-kotno stevilo.'''
+    if k == 3:
+        return n * (n + 1) // 2
+    if k == 4:
+        return n * n
+    if k == 5:
+        return n * (3 * n - 1) // 2
+    if k == 6:
+        return n * (2 * n - 1)
+    if k == 7:
+        return n * (5 * n - 3) // 2
+    if k == 8:
+        return n * (3 * n - 2)
+
+def naloga61():
+    '''Find the sum of the only ordered set of six cyclic 4-digit numbers for which each polygonal type: triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different number in the set.'''
+    # 8-kotna stirimestna od 19 do 58, v mnozici vsa 4-mestna
+    mnozica = [
+        [],
+        [],
+        [],
+        [k_kotno(3,i) for i in range(45, 141)],
+        [k_kotno(4,i) for i in range(32, 100)],
+        [k_kotno(5,i) for i in range(26, 82)],
+        [k_kotno(6,i) for i in range(23, 71)],
+        [k_kotno(7,i) for i in range(21, 64)]
+    ]
+    moznosti = [3, 4, 5, 6, 7]
+    for i in range(19, 59):
+        for tipi in list(itertools.permutations(moznosti)):
+            konec = False
+            tipi = [m for m in tipi]
+            stevilo = k_kotno(8, i)
+            zeljena = [stevilo]
+
+            while tipi != [] and not konec:
+                for ostanek in range(10, 100):
+                    skok = False
+                    zacetek = stevilo % 100
+                    preverjam = zacetek * 100 + ostanek
+                    for k in tipi:
+                        if preverjam in mnozica[k]:
+                            if len(zeljena) == 5 and preverjam % 100 == zeljena[0] // 100:
+                                stevilo = preverjam
+                                zeljena.append(stevilo)
+                                tipi.remove(k)
+                                skok = True
+                                break
+                    if skok:
+                        break
+                if ostanek == 99 :
+                        konec = True
+                        
+            if len(zeljena) == 6:
+                return zeljena
+
+#naloga61()
+
+# and zeljena[0] // 100 == zeljena[5] % 100
