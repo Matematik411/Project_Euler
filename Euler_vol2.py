@@ -660,26 +660,21 @@ def naloga61():
             zeljena = [stevilo]
 
             while tipi != [] and not konec:
-                for ostanek in range(10, 100):
-                    skok = False
-                    zacetek = stevilo % 100
-                    preverjam = zacetek * 100 + ostanek
-                    for k in tipi:
+                for k in tipi:
+                    for ostanek in range(10, 100):
+                        skok = False
+                        zacetek = stevilo % 100
+                        preverjam = zacetek * 100 + ostanek
                         if preverjam in mnozica[k]:
-                            if len(zeljena) == 5 and preverjam % 100 == zeljena[0] // 100:
-                                stevilo = preverjam
-                                zeljena.append(stevilo)
-                                tipi.remove(k)
-                                skok = True
-                                break
-                    if skok:
-                        break
-                if ostanek == 99 :
-                        konec = True
-                        
-            if len(zeljena) == 6:
-                return zeljena
-
-#naloga61()
-
-# and zeljena[0] // 100 == zeljena[5] % 100
+                            stevilo = preverjam
+                            zeljena.append(stevilo)
+                            tipi.remove(k)
+                            skok = True
+                            break
+                        if skok:
+                            break
+                    if ostanek == 99 :
+                            konec = True
+                            
+            if len(zeljena) == 6 and (zeljena[5] % 100) == (zeljena[0] // 100):
+                return sum(zeljena)
