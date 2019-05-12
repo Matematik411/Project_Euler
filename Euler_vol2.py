@@ -243,18 +243,25 @@ def gcd(m, n):
 
 def naloga31(vrednost, seznam):
     '''How many different ways can vrednost be made using any number of coins?'''
-    if seznam == []:
-        return 0
-    vrednost -= seznam[0]
-    if vrednost == 0:
-        vrednost += seznam[0]
-        return 1 + naloga31(vrednost, seznam[1:])
-    elif vrednost < 0:
-        vrednost += seznam[0]
-        return naloga31(vrednost, seznam[1:])
-    elif vrednost > 0:
-        return naloga31(vrednost, seznam) + naloga31(vrednost + seznam[0], seznam[1:])
-
+    resitve = {}
+    def nal31_memo(vrednost, seznam):
+        if seznam == []:
+            return 0
+        vrednost -= seznam[0]
+        if vrednost == 0:
+            vrednost += seznam[0]
+            resitve[(vrednost, seznam)] =  1 + nal31_memo(vrednost, seznam[1:])
+            return resitve[(vrednost, seznam)]
+        elif vrednost < 0:
+            vrednost += seznam[0]
+            resitve[(vrednost, seznam)] =  nal31_memo(vrednost, seznam[1:])
+            return resitve[(vrednost, seznam)]
+        elif vrednost > 0:
+            resitve[(vrednost, seznam)] = nal31_memo(vrednost, seznam) + nal31_memo(vrednost + seznam[0], seznam[1:])
+            return resitve[(vrednost, seznam)]
+    return nal31_memo(vrednost, seznam)
+#naloga31(6, [5,4,3,2,1])
+#73682
 def naloga32():
     '''Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.'''
     mnozica_resitev = set()
@@ -716,6 +723,22 @@ def naloga67():
         return resitve[(n,i)]
     return trikotna_vsota(0, 0)
 
+def naloga76(n):
+    '''How many different ways can n be written as a sum of at least two positive integers?'''
+    moznosti = [0] * (n + 1)
+
+    moznosti[0] = 1
+
+    for i in range(1, n):
+        for j in range(i, n + 1):
+            moznosti[j] += moznosti[j - i]
+    return moznosti[n]
+
+naloga76(3)
+# 2: 11
+# 3: 21, 111
+# 4: 31, 22, 211, 111
+# 5: 41, 32, 221, 311, 2111, 11111
 
 
 def naloga77(n):
