@@ -626,7 +626,15 @@ def naloga58():
                 prastevila += 1
     return n ** 0.5
 
-
+def naloga63():
+    '''How many n-digit positive integers exist which are also an nth power?'''
+    koliko = 0
+    for a in range(1,10):
+        n = 1
+        while len(str(a ** n)) == n:
+            koliko += 1
+            n +=1
+    return koliko
 
 
 # TA NE DELA
@@ -728,12 +736,6 @@ def naloga76(n):
     return moznosti[n]
 
 
-# 2: 11
-# 3: 21, 111
-# 4: 31, 22, 211, 111
-# 5: 41, 32, 221, 311, 2111, 11111
-
-
 def naloga77(n):
     '''What is the first value which can be written as the sum of primes in over n different ways?'''
     seznam_prastevil = [2]
@@ -767,14 +769,29 @@ def naloga71(n):
     return ulomki[polozaj - 1][1][0]
 
 
-#Ta ne dela!
+#Ta ne dela! - zdajšnja verzija je kr neki!
 def naloga72(n):
     '''How many elements would be contained in the set of reduced proper fractions for d ≤ 1,000,000?'''
+    st_tujih = {}
     ulomki = 0
     for im in range(2, n + 1):
-        for st in range(1, im):
-            if gcd(st, im) == 1:
-                ulomki += 1
+        if je_prastevilo(im):
+            st_tujih[im] = im - 1
+        else:
+            p = delitelji(im)[-2]
+            k = (im // delitelji(im)[-2])
+            if p % k == 0:
+                stevilo = st_tujih[p] - 1
+                stevilo += (im - p - 1) // k
+            else:
+                m = 0
+                while k ** m < p:
+                    m += 1 
+                stevilo = st_tujih[p] - m
+                stevilo += (im - p - 1) // k
+            st_tujih[im] = stevilo
+        ulomki += st_tujih[im]
+
     return ulomki
 
 def naloga73(n):
@@ -789,7 +806,4 @@ def naloga73(n):
     polozaj2 = ulomki.index([1/3, (1,3)])
 
     return polozaj1 - polozaj2 - 1
-
-
-
 
