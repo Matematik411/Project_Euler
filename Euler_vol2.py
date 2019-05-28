@@ -807,3 +807,15 @@ def naloga73(n):
 
     return polozaj1 - polozaj2 - 1
 
+
+
+def naloga97():
+    '''However, in 2004 there was found a massive non-Mersenne prime which contains 2,357,207 digits: 28433×2^7830457+1.
+    Find the last ten digits of this prime number.'''
+    n = 7830457
+    stevilo = 28433
+    for _ in range(n):
+        stevilo *= 2
+        stevilo = stevilo % 10 ** 10
+    return stevilo + 1
+    
