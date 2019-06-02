@@ -1,5 +1,13 @@
 import math
+import itertools
 
+def vsota_stevk(n):
+    '''Vrne vsoto stevk.'''
+    vsota = 0
+    while n > 0:
+        vsota += n % 10
+        n //= 10
+    return vsota
 
 def memo(fun):
     resitve = {}
@@ -24,6 +32,7 @@ def najlazja_pot_memo(A):
     return rekurz_pomozna(len(A) - 1, len(A[0]) - 1)
 
 def trikratna_pot_memo(A):
+    '''se zacikla... :('''
     @memo
     def rekurz(i, j, dol=False, gor=False):
         polje = A[i][j]
@@ -72,3 +81,85 @@ def naloga81(k=1):
         return najlazja_pot_memo(matrika)
     elif k == 2:
         return trikratna_pot_memo(matrika)
+
+
+def verizni_ulomek_korena(n):
+    if math.sqrt(n) % 1 == 0:
+        return 0
+    
+    koren = round(math.sqrt(n), 1)
+    a = int(koren)
+    ulomek = [a]
+    seznam = []
+    game = []
+
+    stevec = a
+    im = n - stevec ** 2
+    a = int((koren + stevec) / im)
+    game.append((stevec, im))
+    seznam.append(a)
+    
+    while True:
+        stevec = -stevec + im * a
+        im = (n - stevec ** 2) // im
+
+        a = int((koren + stevec) / im)
+        if (stevec, im) == game[0]:
+            break
+        game.append((stevec, im))
+        seznam.append(a)
+    ulomek.append(tuple(seznam))
+
+    return len(seznam)
+
+def naloga64(n):
+    '''How many continued fractions for n ≤ 10000 have an odd period?'''
+    st = 0
+    for i in range(1, n + 1):
+        if verizni_ulomek_korena(i) % 2 == 1:
+            st += 1
+    return st
+
+def naloga65(k):
+    '''Find the sum of digits in the numerator of the n-th convergent of the continued fraction for e.'''
+    '''Resim s rekurzivno relacijo s predavanj ProseminarjaB.'''
+    def a(i):
+        if i % 3 == 2:
+            return 2 * ((i // 3) + 1)
+        else:
+            return 1
+    p_0 = 1
+    p_1 = 2
+    p = 2 + 1
+    for i in range(2, k):
+        p_0, p_1, p =  p_1, p, a(i) * p + p_1
+    return vsota_stevk(p)
+
+def verizni_ulomek_lih(m, n):
+    a = int(m / n)
+    ulomek = [a]
+    seznam = []
+    game = []
+
+    stevec = n
+    im = m - n * a
+    while im != 0:
+        a = int(stevec / im)
+        game.append((stevec, im))
+        seznam.append(a)
+        stevec, im = im, stevec - im * a
+    if len(seznam) % 2 == 0 and seznam != []:
+        b = seznam[-1]
+        del seznam[1]
+        seznam.append(b - 1)
+        seznam.append(1)
+    ulomek.append(tuple(seznam))
+
+    return ulomek
+
+
+        
+
+    
+
+

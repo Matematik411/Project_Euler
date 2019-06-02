@@ -637,23 +637,6 @@ def naloga63():
     return koliko
 
 
-# TA NE DELA
-def naloga69(m):
-    #Yup, no way this is The way...
-    resitev = 1
-    vrednost = 1
-    for n in range(2, m + 1):
-        phi_n = 0
-        for d in range(1, n):
-            if tuji_st(d, n):
-                phi_n += 1
-        if n / phi_n > resitev:
-            resitev = n / phi_n
-            vrednost = n
-    return vrednost
-        
-
-
 
 def naloga61():
     '''Find the sum of the only ordered set of six cyclic 4-digit numbers for which each polygonal type: triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different number in the set.'''
