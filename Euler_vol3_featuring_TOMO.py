@@ -157,9 +157,60 @@ def verizni_ulomek_lih(m, n):
 
     return ulomek
 
+def naloga92(n):
+    '''How many starting numbers below n will arrive at 89?'''
+    # Rabi kakšno minutko
+    def naslednji(k):
+        nov = 0
+        while k > 0:
+            nov += (k % 10) ** 2
+            k //= 10
+        return nov
+    vsi = 0
+    for i in range(1, n + 1):
+        while i != 1:
+            if i == 89:
+                vsi += 1
+                break
+            i = naslednji(i)
+    return vsi
 
+
+def naloga69(n):
+    '''Find the value of n ≤ 1,000,000 for which n/φ(n) is a maximum.'''
+    #Poskusim memo, ker drugače traja in traja -- ŠE VEDNO TRAJA I guess, da par ur xD
+    slovar = {}
+    def prafaktorji(n):
+        zac = n
+        if n not in slovar:
+            p = set()
+            for a in range(2, n // 2 + 1):
+                while n % a == 0:
+                    p.add(a)
+                    n //= a
+                if n in slovar:
+                    p.update(slovar[n])
+                    break
+            if len(p) == 0:
+                slovar[zac] = [zac]
+            else:
+                slovar[zac] = list(p)
+        return slovar[zac]
+
+    def phi(n):
+        resitev = n
+        for p in prafaktorji(n):
+            resitev *= (1 - (1 / p))
+        return int(resitev)
+
+    m = 1
+    pravi = 1
+    for a in range(2, n + 1):
+        vrednost = a / phi(a)
+        if vrednost >= m:
+            m = vrednost
+            pravi = a
+    return pravi, m
         
-
-    
 
 
