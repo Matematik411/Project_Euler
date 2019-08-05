@@ -1,6 +1,6 @@
 import math 
 import itertools
-
+#test ali spreminja
 def fakulteta(n):
     '''Produkt naravnih stevil do n.'''
     if n <= 1:
