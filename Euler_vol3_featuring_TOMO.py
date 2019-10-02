@@ -213,4 +213,71 @@ def naloga69(n):
     return pravi, m
         
 
+#-----------------------------------------
+def seznam_prastevil(n):
+    sez = [2]
+    a = 3
+    while a < n:
+        pr = True
+        for k in sez:
+            if a % k == 0:
+                pr = False
+                break
+        if pr:
+            sez.append(a)
+        a += 1
+    return sez
+
+#5683
+def naloga51(seznam):
+    stevke = "0123456789"
+    i = 5683
+    seznam = seznam
+    while i < len(seznam):
+        stevilo = str(seznam[i])
+        dolzina = len(stevilo)
+        for koliko in [2,3,4]:
+            for mesta in itertools.combinations([n for n in range(dolzina)], koliko):
+                prastevil = 0
+                switch = True
+                a = stevilo[mesta[0]]
+                for mesto in mesta:
+                    if stevilo[mesto] != a:
+                        switch = False
+                        break
+                if switch:
+                    for x in stevke:
+                        kopija = ""
+                        for mesto in range(dolzina):
+                            if mesto in mesta:
+                                kopija += x
+                            else:
+                                kopija += stevilo[mesto]
+                        if int(kopija) in seznam:
+                            prastevil += 1
+                if prastevil == 8:
+                    return stevilo
+        i += 1
+                
+
+def naloga99():
+    #takes quite a while xD
+    with open("p099_base_exp.txt", "r") as dat:
+        najvecji = 1
+        vrstica = 0
+        for podatek in dat.readlines():
+            baza, eks = podatek.strip().split(",")
+            stevilo = int(baza) ** int(eks)
+            if stevilo > najvecji:
+                prava = vrstica
+                najvecji = stevilo
+            vrstica += 1
+        return prava
+
+                
+
+
+
+
+
 
