@@ -47,7 +47,7 @@ def trikratna_pot_memo(A):
                 return min(rekurz(i, j - 1), rekurz(i + 1, j, dol=True)) + polje
         elif i == len(A) - 1:
             if dol:
-                return rekurt(i, j - 1) + polje
+                return rekurz(i, j - 1) + polje
             elif rekurz(i, j - 1) > rekurz(i - 1, j, gor=True):
                 return min(rekurz(i, j - 1), rekurz(i - 1, j, gor=True)) + polje
             else:
