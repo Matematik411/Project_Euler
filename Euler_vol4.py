@@ -1,54 +1,61 @@
-def to_binary(n):
-    binarno = ""
-    n = int(n)
-    while len(binarno) < 7:
-        binarno = str(n % 2) + binarno
-        n //= 2
-    return binarno
+from functools import lru_cache
 
-def from_binary(n):
-    prava = 0
-    for i in range(7):
-        if n[-i-1] == "1":
-            prava += 2 ** i
-    return prava
+def problem62(k):
+    '''Find the smallest cube for which exactly k permutations of its digits are cube.'''
+    slovar = {}
 
 
-def xor(a, b):
-    nov = ""
-    for i in range(7):
-        if a[i] == b[i]:
-            nov += "0"
+    def v_seznam(st):
+        s = "0" * 10
+        for a in str(st):
+            a = int(a)
+            stevka = int(s[a]) + 1
+            s = s[:a] + str(stevka) + s[a+1:]
+        if s not in slovar:
+            slovar[s] = [st, 1]
         else:
-            nov += "1"
-    return nov
-
-def naloga59(dat):
-    with open(dat, "r") as f:
-        znaki = f.read().split(",")
-    # 32 - 90 and 97 - 122 is ok
-    # key from 97 - 122
-
-    for i in range(97, 123):
-        for j in range(97, 123):
-            for k in range(97, 123):
-                key = [str(i), str(j), str(k)]
-                i = 0
+            if slovar[s][1] == k-1:
+                return slovar[s][0]
+            slovar[s][1] += 1
     
-                zapis = ""
-
-                for znak in znaki:
-                    d = from_binary(xor(to_binary(znak), to_binary(key[i])))
-                    if 32 <= d <= 90 or 97 <= d <= 122:
-                        zapis += chr(from_binary(xor(to_binary(znak), to_binary(key[i]))))
-                        i += 1
-                        if i == 3:
-                            i -= 3
-                    else:
-                        napaka = True
-                        break
-                if not napaka:
-                    return zapis
+    i = 10
+    while True:
+        resitev = v_seznam(i*i*i)
+        if resitev is not None:
+            return resitev
+        i += 1 
     
+def pet_kotno(n):
+    return (n * (3*n - 1) // 2 , n * (3*n + 1) // 2 )
 
-print(naloga59("p059_cipher.txt"))
+def naloga78(e):
+
+    # stevilo razdelitev stevila n, na neničelne člene
+    # formula iz predavanj diskretne matematike
+    @lru_cache(maxsize=None)
+    def p(n):
+        if n == 0:
+            return 1
+
+        vrednost = 0
+
+        i = 1
+        while True:
+            prvo, drugo = pet_kotno(i)
+            if n >= prvo:
+                vrednost += ((-1) ** (i+1)) * p(n - prvo)
+            else:
+                break
+            if n >= drugo:
+                vrednost += ((-1) ** (i+1)) * p(n - drugo)
+            
+            i += 1
+        
+        return vrednost
+    
+    a = 1
+    while True:
+        if (p(a) % 10**e == 0):
+            return (a, p(a))
+        a += 1
+
