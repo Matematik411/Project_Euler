@@ -718,6 +718,9 @@ def naloga76(n):
             moznosti[j] += moznosti[j - i]
     return moznosti[n]
 
+def razclenitve(n):
+    '''Vrne stevilo razclenitev naravnega stevila na neničelne seštevance.'''
+    return naloga76(n)+1
 
 def naloga77(n):
     '''What is the first value which can be written as the sum of primes in over n different ways?'''
