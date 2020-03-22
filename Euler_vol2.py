@@ -33,7 +33,6 @@ def je_prastevilo(n):
         for i in range(2, int(math.sqrt(n))+1):
             if n % i == 0:
                 return False
-                break
         else:
             return True
     else:
@@ -777,3 +776,29 @@ def naloga97():
         stevilo = stevilo % 10 ** 10
     return stevilo + 1
     
+
+
+def s(n, k):
+    '''Stevilo razdelitev mnozice z n elementi na k delov.'''
+    if n == k == 0:
+        return 1
+    if k == 0:
+        return 0
+    if n == 0:
+        return 0
+    
+    return s(n-1, k-1) + k * s(n-1, k)
+
+
+
+def p(n, k):
+    '''Stevilo razclenitev stevila n na k clenov.'''
+    if n == k == 0:
+        return 1
+    if k <= 0:
+        return 0
+    if n < k:
+        return 0
+    
+    return p(n-1, k-1) + p(n-k, k)
+
